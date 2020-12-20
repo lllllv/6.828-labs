@@ -64,7 +64,7 @@ duppage(envid_t envid, unsigned pn)
 
 	// LAB 4: Your code here.
 
-	pte_t src_pte = (((pte_t*)UVPT)[pn]);
+	pte_t src_pte = uvpt[pn];
 	if(src_pte)
 	{
 		if((src_pte & PTE_W) || (src_pte & PTE_COW))
@@ -120,10 +120,11 @@ fork(void)
 		return 0;	
 	}
 		
-	for (addr = (uint8_t*) UTEXT; addr < end; addr += PGSIZE)
-		duppage(envid, (uint32_t)addr / PGSIZE);
-
-	duppage(envid, 0xeebfd000 / PGSIZE);
+	for(uint32_t i = 0; i < USTACKTOP / PGSIZE; i++)
+	{
+		if(uvpd[i / NPTENTRIES])
+			duppage(envid, i);
+	}
 
 	sys_page_alloc(envid, (void*)(UXSTACKTOP - PGSIZE), PTE_U | PTE_P | PTE_W);
 
