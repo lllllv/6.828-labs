@@ -90,7 +90,7 @@ flush_block(void *addr)
 		return;
 
 	uint32_t blockbase = blockno * PGSIZE + DISKMAP;
-	int r = ide_write(8 * blockno, (void*)blockbase, 4);
+	int r = ide_write(8 * blockno, (void*)blockbase, 8);
 	if(r < 0)
 		panic("flush block error while writing to disk%e\n", r);
 
