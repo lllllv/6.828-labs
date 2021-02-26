@@ -307,7 +307,7 @@ copy_shared_pages(envid_t child)
 	{
 		if(uvpd[i / NPDENTRIES])
 		{
-			pte_t src_pte = (((pte_t*)UVPT)[i]);
+			pte_t src_pte = uvpt[i];
 			if(src_pte & PTE_SHARE)
 			{
 				if(sys_page_map(0, (void*)(i * PGSIZE), child, (void*)(i * PGSIZE), src_pte & PTE_SYSCALL) < 0)
